@@ -1,0 +1,18 @@
+<?php
+session_start();
+include "../config/db.php";
+
+if(!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'admin'){
+    header("Location: ../auth/login.php");
+    exit();
+}
+
+$id = $_GET['id'];
+$status = $_GET['status'];
+
+// update request status
+$stmt = $conn->prepare("UPDATE requests SET status=? WHERE id=?");
+$stmt->execute([$status, $id]);
+
+header("Location: view_requests.php");
+?>
